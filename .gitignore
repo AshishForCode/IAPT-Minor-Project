@@ -1,0 +1,43 @@
+# General
+.DS_Store
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Frontend (React/Vite)
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.eslintcache
+
+# Backend & Database
+backend/venv/
+backend/env/
+backend/.env
+backend/instance/
+*.sqlite3
+*.db
+backend/*.db
+setup_sqlite.py
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
