@@ -1,5 +1,18 @@
 # IAPT Deployment Guide
 
+## 🎯 Deployment Options
+
+| Option | Backend | Frontend | Speed | Cost |
+|--------|---------|----------|-------|------|
+| **Recommended** | Render | Vercel | ⚡ Fast | 💰 Free |
+| Alternative | Render | Render | ⚡ Same | 💰 Free |
+
+## 📖 Quick Links
+
+- **👉 [VERCEL_QUICK_START.md](./VERCEL_QUICK_START.md)** - 30-second deployment guide
+- **[VERCEL_RENDER_DEPLOYMENT.md](./VERCEL_RENDER_DEPLOYMENT.md)** - Complete guide with troubleshooting
+- **[RENDER_QUICK_DEPLOY.md](./RENDER_QUICK_DEPLOY.md)** - Deploy both to Render (alternative)
+
 ## Project Status ✅
 All issues have been fixed and the project is ready for deployment.
 
