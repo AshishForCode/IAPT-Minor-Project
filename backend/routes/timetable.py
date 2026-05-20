@@ -7,11 +7,11 @@ timetable_bp = Blueprint('timetable', __name__)
 @token_required
 def handle_timetable(current_user_id):
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     
     try:
         if request.method == 'GET':
-            cursor.execute("SELECT * FROM timetable WHERE user_id = %s", (current_user_id,))
+            cursor.execute("SELECT * FROM timetable WHERE user_id = ?", (current_user_id,))
             return jsonify(cursor.fetchall()), 200
             
         elif request.method == 'POST':
@@ -26,8 +26,8 @@ def handle_timetable(current_user_id):
             # Conflict detection logic
             cursor.execute("""
                 SELECT * FROM timetable 
-                WHERE user_id = %s AND date = %s 
-                AND (start_time < %s AND end_time > %s)
+                WHERE user_id = ? AND date = ? 
+                AND (start_time < ? AND end_time > ?)
             """, (current_user_id, date, end_time, start_time))
             
             if cursor.fetchone():
@@ -35,7 +35,7 @@ def handle_timetable(current_user_id):
                 
             cursor.execute("""
                 INSERT INTO timetable (user_id, subject, day, date, start_time, end_time, location)
-                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
             """, (current_user_id, subject, day, date, start_time, end_time, location))
             conn.commit()
             return jsonify({'message': 'Added to timetable'}), 201
@@ -45,14 +45,14 @@ def handle_timetable(current_user_id):
             timetable_id = data.get('timetable_id')
             subject = data.get('subject')
             
-            cursor.execute("UPDATE timetable SET subject = %s WHERE timetable_id = %s AND user_id = %s", 
+            cursor.execute("UPDATE timetable SET subject = ? WHERE timetable_id = ? AND user_id = ?", 
                            (subject, timetable_id, current_user_id))
             conn.commit()
             return jsonify({'message': 'Updated timetable'}), 200
             
         elif request.method == 'DELETE':
             timetable_id = request.args.get('id')
-            cursor.execute("DELETE FROM timetable WHERE timetable_id = %s AND user_id = %s", (timetable_id, current_user_id))
+            cursor.execute("DELETE FROM timetable WHERE timetable_id = ? AND user_id = ?", (timetable_id, current_user_id))
             conn.commit()
             return jsonify({'message': 'Deleted from timetable'}), 200
             

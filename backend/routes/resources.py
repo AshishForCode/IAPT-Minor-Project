@@ -7,7 +7,7 @@ resources_bp = Blueprint('resources', __name__)
 @token_required
 def get_resources(current_user_id):
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     try:
         cursor.execute("SELECT * FROM resources")
         return jsonify(cursor.fetchall()), 200

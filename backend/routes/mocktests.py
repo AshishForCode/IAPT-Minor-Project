@@ -7,7 +7,7 @@ mocktests_bp = Blueprint('mocktests', __name__)
 @token_required
 def get_mock_tests(current_user_id):
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     try:
         cursor.execute("SELECT * FROM mock_tests")
         return jsonify(cursor.fetchall()), 200
@@ -21,9 +21,9 @@ def get_mock_tests(current_user_id):
 @token_required
 def get_test_questions(current_user_id, test_id):
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     try:
-        cursor.execute("SELECT question_id, question_text, option_a, option_b, option_c, option_d FROM questions WHERE mock_test_id = %s", (test_id,))
+        cursor.execute("SELECT question_id, question_text, option_a, option_b, option_c, option_d FROM questions WHERE mock_test_id = ?", (test_id,))
         return jsonify(cursor.fetchall()), 200
     except Exception as e:
         return jsonify({'message': str(e)}), 500
@@ -38,9 +38,9 @@ def submit_test(current_user_id, test_id):
     answers = data.get('answers', {}) # dict of question_id: option
     
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     try:
-        cursor.execute("SELECT question_id, correct_option FROM questions WHERE mock_test_id = %s", (test_id,))
+        cursor.execute("SELECT question_id, correct_option FROM questions WHERE mock_test_id = ?", (test_id,))
         questions = cursor.fetchall()
         
         correct = 0
@@ -54,7 +54,7 @@ def submit_test(current_user_id, test_id):
         
         cursor.execute("""
             INSERT INTO mock_test_attempts (user_id, mock_test_id, score, percentage, time_taken)
-            VALUES (%s, %s, %s, %s, %s)
+            VALUES (?, ?, ?, ?, ?)
         """, (current_user_id, test_id, correct, score, data.get('time_taken', 0)))
         conn.commit()
         

@@ -7,13 +7,13 @@ dashboard_bp = Blueprint('dashboard', __name__)
 @token_required
 def get_summary(current_user_id):
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     try:
         # Dynamic summary data logic
-        cursor.execute("SELECT COUNT(*) as count FROM timetable WHERE user_id = %s", (current_user_id,))
+        cursor.execute("SELECT COUNT(*) as count FROM timetable WHERE user_id = ?", (current_user_id,))
         classes_count = cursor.fetchone()['count']
 
-        cursor.execute("SELECT COUNT(*) as count FROM placement_applications WHERE user_id = %s", (current_user_id,))
+        cursor.execute("SELECT COUNT(*) as count FROM placement_applications WHERE user_id = ?", (current_user_id,))
         applications_count = cursor.fetchone()['count']
         
         # Placeholder or real counts depending on table state

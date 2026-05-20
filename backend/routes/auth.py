@@ -28,13 +28,13 @@ def register():
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute("SELECT user_id FROM users WHERE email = %s", (email,))
+        cursor.execute("SELECT user_id FROM users WHERE email = ?", (email,))
         if cursor.fetchone():
             return jsonify({'message': 'Email already exists'}), 400
 
         query = """
             INSERT INTO users (name, email, password_hash, phone, college, branch, year, reg_no)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """
         cursor.execute(query, (name, email, hashed_password, phone, college, branch, year, reg_no))
         conn.commit()
@@ -59,9 +59,9 @@ def login():
         return jsonify({'message': 'Email and password are required'}), 400
 
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     try:
-        cursor.execute("SELECT user_id, password_hash, name, role FROM users WHERE email = %s", (email,))
+        cursor.execute("SELECT user_id, password_hash, name, role FROM users WHERE email = ?", (email,))
         user = cursor.fetchone()
 
         if not user or not bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):

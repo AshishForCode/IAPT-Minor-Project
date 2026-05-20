@@ -7,10 +7,10 @@ placement_bp = Blueprint('placement', __name__)
 @token_required
 def handle_applications(current_user_id):
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     try:
         if request.method == 'GET':
-            cursor.execute("SELECT * FROM placement_applications WHERE user_id = %s", (current_user_id,))
+            cursor.execute("SELECT * FROM placement_applications WHERE user_id = ?", (current_user_id,))
             return jsonify(cursor.fetchall()), 200
             
         elif request.method == 'POST':
@@ -21,7 +21,7 @@ def handle_applications(current_user_id):
             
             cursor.execute("""
                 INSERT INTO placement_applications (user_id, company, role, status)
-                VALUES (%s, %s, %s, %s)
+                VALUES (?, ?, ?, ?)
             """, (current_user_id, company, role, status))
             conn.commit()
             return jsonify({'message': 'Application added'}), 201
