@@ -3,7 +3,7 @@ services:
     name: iapt-backend
     env: python
     buildCommand: pip install -r backend/requirements-deploy.txt
-    startCommand: gunicorn backend.wsgi:app --chdir backend --workers 3 --bind 0.0.0.0:${PORT}
+    startCommand: python backend/init_db.py && gunicorn backend.wsgi:app --chdir backend --workers 3 --bind 0.0.0.0:${PORT}
 
   - type: static
     name: iapt-frontend

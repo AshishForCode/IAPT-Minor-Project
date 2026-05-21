@@ -17,7 +17,10 @@ def register():
     college = data.get('college', '')
     branch = data.get('branch', '')
     year = data.get('year')
-    year = int(year) if year else None
+    try:
+        year = int(year) if year else None
+    except ValueError:
+        year = None
     reg_no = data.get('reg_no', '')
 
     if not name or not email or not password:
