@@ -10,9 +10,9 @@ def register():
     if not data:
         return jsonify({'message': 'No input data provided'}), 400
 
-    name = data.get('name')
-    email = data.get('email')
-    password = data.get('password')
+    name = data.get('name', '').strip()
+    email = data.get('email', '').strip().lower()
+    password = data.get('password', '')
     phone = data.get('phone', '')
     college = data.get('college', '')
     branch = data.get('branch', '')
@@ -52,8 +52,8 @@ def login():
     if not data:
         return jsonify({'message': 'No input data provided'}), 400
 
-    email = data.get('email')
-    password = data.get('password')
+    email = data.get('email', '').strip().lower()
+    password = data.get('password', '')
 
     if not email or not password:
         return jsonify({'message': 'Email and password are required'}), 400

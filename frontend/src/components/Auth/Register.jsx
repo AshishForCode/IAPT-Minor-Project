@@ -16,7 +16,11 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    const res = await register(formData);
+    const normalizedData = {
+      ...formData,
+      email: formData.email.trim().toLowerCase(),
+    };
+    const res = await register(normalizedData);
     if (res.success) {
       navigate('/login');
     } else {
